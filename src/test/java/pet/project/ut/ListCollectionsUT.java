@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import pet.project.collections.ListCollections;
-import pet.project.collections.MyArrayListImpl;
+import pet.project.collections.MyListImpl;
 import pet.project.common.TimeUtils;
 
 import java.util.ArrayList;
@@ -54,14 +54,14 @@ public class ListCollectionsUT {
 
     @Test
     void myArrayListImplTest() {
-        MyArrayListImpl<Integer> myArrayListImpl = new MyArrayListImpl<>();
-        myArrayListImpl.add(1);
-        myArrayListImpl.add(null);
-        myArrayListImpl.add(3);
+        MyListImpl<Integer> myListImpl = new MyListImpl<>();
+        myListImpl.add(1);
+        myListImpl.add(null);
+        myListImpl.add(3);
 
-        Assertions.assertEquals(3, myArrayListImpl.size());
+        Assertions.assertEquals(3, myListImpl.size());
 
 
-        Assertions.assertEquals(1, myArrayListImpl.indexOf(null));
+        Assertions.assertEquals(1, myListImpl.indexOf(null));
     }
 }
