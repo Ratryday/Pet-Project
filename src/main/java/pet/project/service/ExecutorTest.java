@@ -13,18 +13,27 @@ public class ExecutorTest {
   private final LoggerExtender log = new LoggerExtender(this.getClass().getName());
 
   private final CyclicBarrier cyclicBarrier;
+  private final Semaphore semaphore;
 
   public ExecutorTest() {
     this.cyclicBarrier = new CyclicBarrier(3, () -> log.info("All previous tasks are completed"));
-    ;
+    this.semaphore = new Semaphore(2);
   }
 
-  public void runMethods() {
-    /*execute();
-    executeService();
-    scheduledExecutorService();
-    futureTask();*/
-    cyclicBarrierTest();
+  public void runMethods() throws InterruptedException {
+    // execute();
+    // executeService();
+    // scheduledExecutorService();
+    // futureTask();
+    // cyclicBarrierTest();
+    Thread t1 = new Thread(this::executeSemaphore, "T4");
+    Thread t2 = new Thread(this::executeSemaphore, "T5");
+    Thread t3 = new Thread(this::executeSemaphore, "T6");
+    t1.start();
+    Thread.sleep(100L);
+    t2.start();
+    Thread.sleep(100L);
+    t3.start();
   }
 
   private void execute() {
@@ -85,6 +94,24 @@ public class ExecutorTest {
       t1.start();
       t2.start();
       t3.start();
+    }
+  }
+
+  public void executeSemaphore() {
+    log.info("Available permit : " + semaphore.availablePermits());
+
+    if (semaphore.tryAcquire()) {
+      log.info("Number of threads waiting to acquire: " + semaphore.getQueueLength());
+      try {
+        log.info("Permit acquired");
+        Thread.sleep(1000L);
+      } catch (InterruptedException e) {
+        throw new RuntimeException(e);
+      } finally {
+        semaphore.release();
+      }
+    } else {
+      log.info("Permit not acquired");
     }
   }
 }
