@@ -21,11 +21,11 @@ public class ExecutorTest {
   }
 
   public void runMethods() throws InterruptedException {
-    // execute();
-    // executeService();
-    // scheduledExecutorService();
-    // futureTask();
-    // cyclicBarrierTest();
+    execute();
+    executeService();
+    scheduledExecutorService();
+    futureTask();
+    cyclicBarrierTest();
     Thread t1 = new Thread(this::executeSemaphore, "T4");
     Thread t2 = new Thread(this::executeSemaphore, "T5");
     Thread t3 = new Thread(this::executeSemaphore, "T6");
