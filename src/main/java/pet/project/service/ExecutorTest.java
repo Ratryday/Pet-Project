@@ -10,15 +10,21 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class ExecutorTest {
 
-  private final LoggerExtender log =
-      new LoggerExtender(
-          ExecutorTest.class.getPackageName() + "." + ExecutorTest.class.getName(), null);
+  private final LoggerExtender log = new LoggerExtender(this.getClass().getName());
+
+  private final CyclicBarrier cyclicBarrier;
+
+  public ExecutorTest() {
+    this.cyclicBarrier = new CyclicBarrier(3, () -> log.info("All previous tasks are completed"));
+    ;
+  }
 
   public void runMethods() {
-    execute();
+    /*execute();
     executeService();
     scheduledExecutorService();
-    futureTask();
+    futureTask();*/
+    cyclicBarrierTest();
   }
 
   private void execute() {
@@ -29,7 +35,7 @@ public class ExecutorTest {
 
   private void executeService() {
     ExecutorService executor2 = Executors.newFixedThreadPool(10);
-    executor2.submit(new Task());
+    executor2.submit(new Task(cyclicBarrier));
     log.info("ExecutorService: " + LocalDateTime.now());
   }
 
@@ -67,6 +73,18 @@ public class ExecutorTest {
       log.info(futureResult);
     } catch (InterruptedException | ExecutionException | TimeoutException e) {
       log.error(e);
+    }
+  }
+
+  public void cyclicBarrierTest() {
+    Thread t1 = new Thread(new Task(cyclicBarrier), "T1");
+    Thread t2 = new Thread(new Task(cyclicBarrier), "T2");
+    Thread t3 = new Thread(new Task(cyclicBarrier), "T3");
+
+    if (!cyclicBarrier.isBroken()) {
+      t1.start();
+      t2.start();
+      t3.start();
     }
   }
 }
