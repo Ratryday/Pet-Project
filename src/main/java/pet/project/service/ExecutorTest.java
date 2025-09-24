@@ -13,6 +13,7 @@ public class ExecutorTest {
     execute();
     executeService();
     scheduledExecutorService();
+    futureTask();
   }
 
   private static void execute() {
@@ -51,4 +52,19 @@ public class ExecutorTest {
         TimeUnit.SECONDS);
   }
 
+  private static void futureTask() {
+    ExecutorService executor = Executors.newFixedThreadPool(10);
+    Future<String> future =
+        executor.submit(
+            () -> {
+              Thread.sleep(10000L);
+              return "Executed";
+            });
+    try {
+      String futureResult = future.get(100, TimeUnit.SECONDS);
+      System.out.println(futureResult);
+    } catch (InterruptedException | ExecutionException | TimeoutException e) {
+      e.printStackTrace();
+    }
+  }
 }
