@@ -1,5 +1,6 @@
 package pet.project.service;
 
+import pet.project.logger.LoggerExtender;
 import pet.project.service.concurrency.Invoker;
 import pet.project.service.concurrency.Task;
 
@@ -9,50 +10,51 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class ExecutorTest {
 
-  public static void main(String[] args) {
+  private final LoggerExtender log =
+      new LoggerExtender(
+          ExecutorTest.class.getPackageName() + "." + ExecutorTest.class.getName(), null);
+
+  public void runMethods() {
     execute();
     executeService();
     scheduledExecutorService();
     futureTask();
   }
 
-  private static void execute() {
+  private void execute() {
     Executor executor1 = new Invoker();
-    executor1.execute(() -> System.out.println("Invoker: " + LocalDateTime.now()));
-    System.out.println("Executor: " + LocalDateTime.now());
+    executor1.execute(() -> log.info("Invoker: " + LocalDateTime.now()));
+    log.info("Executor: " + LocalDateTime.now());
   }
 
-  private static void executeService() {
+  private void executeService() {
     ExecutorService executor2 = Executors.newFixedThreadPool(10);
     executor2.submit(new Task());
-    System.out.println("ExecutorService: " + LocalDateTime.now());
+    log.info("ExecutorService: " + LocalDateTime.now());
   }
 
-  private static void scheduledExecutorService() {
+  private void scheduledExecutorService() {
     ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
     AtomicInteger futureNum = new AtomicInteger();
     executorService.scheduleAtFixedRate(
-        () -> System.out.println("scheduleAtFixedRate + " + futureNum.getAndIncrement()),
+        () -> log.info("scheduleAtFixedRate + " + futureNum.getAndIncrement()),
         1,
         3,
         TimeUnit.SECONDS);
 
     AtomicInteger scheduledFutureNum = new AtomicInteger();
     executorService.scheduleWithFixedDelay(
-        () ->
-            System.out.println("scheduleWithFixedDelay + " + scheduledFutureNum.getAndIncrement()),
+        () -> log.info("scheduleWithFixedDelay + " + scheduledFutureNum.getAndIncrement()),
         2,
         5,
         TimeUnit.SECONDS);
 
     executorService.schedule(
-        () -> System.out.println("schedule + " + scheduledFutureNum.getAndIncrement()),
-        5,
-        TimeUnit.SECONDS);
+        () -> log.info("schedule + " + scheduledFutureNum.getAndIncrement()), 5, TimeUnit.SECONDS);
   }
 
-  private static void futureTask() {
+  private void futureTask() {
     ExecutorService executor = Executors.newFixedThreadPool(10);
     Future<String> future =
         executor.submit(
@@ -61,10 +63,10 @@ public class ExecutorTest {
               return "Executed";
             });
     try {
-      String futureResult = future.get(100, TimeUnit.SECONDS);
-      System.out.println(futureResult);
+      String futureResult = future.get(1, TimeUnit.SECONDS);
+      log.info(futureResult);
     } catch (InterruptedException | ExecutionException | TimeoutException e) {
-      e.printStackTrace();
+      log.error(e);
     }
   }
 }
