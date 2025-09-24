@@ -12,6 +12,7 @@ public class ExecutorTest {
   public static void main(String[] args) {
     execute();
     executeService();
+    scheduledExecutorService();
   }
 
   private static void execute() {
@@ -24,6 +25,30 @@ public class ExecutorTest {
     ExecutorService executor2 = Executors.newFixedThreadPool(10);
     executor2.submit(new Task());
     System.out.println("ExecutorService: " + LocalDateTime.now());
+  }
+
+  private static void scheduledExecutorService() {
+    ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+
+    AtomicInteger futureNum = new AtomicInteger();
+    executorService.scheduleAtFixedRate(
+        () -> System.out.println("scheduleAtFixedRate + " + futureNum.getAndIncrement()),
+        1,
+        3,
+        TimeUnit.SECONDS);
+
+    AtomicInteger scheduledFutureNum = new AtomicInteger();
+    executorService.scheduleWithFixedDelay(
+        () ->
+            System.out.println("scheduleWithFixedDelay + " + scheduledFutureNum.getAndIncrement()),
+        2,
+        5,
+        TimeUnit.SECONDS);
+
+    executorService.schedule(
+        () -> System.out.println("schedule + " + scheduledFutureNum.getAndIncrement()),
+        5,
+        TimeUnit.SECONDS);
   }
 
 }
