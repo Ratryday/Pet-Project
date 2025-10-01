@@ -1,10 +1,11 @@
-package com.ratryday.pet.config;
+package com.ratryday.pet.postProcessors;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 
 import java.util.Date;
 
+//@Component
 public class InstantiationTracingBeanPostProcessor implements BeanPostProcessor {
 
   @Override
