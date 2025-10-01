@@ -1,4 +1,4 @@
-package pet.project.collections;
+package com.ratryday.pet.collections;
 
 import java.io.Serial;
 import java.util.*;

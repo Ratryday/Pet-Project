@@ -1,4 +1,4 @@
-package pet.project.service.concurrency;
+package com.ratryday.pet.service.concurrency;
 
 import java.util.concurrent.Executor;
 

@@ -1,16 +1,17 @@
-package pet.project.service;
+package com.ratryday.pet.service;
 
-import pet.project.logger.LoggerExtender;
-import pet.project.service.concurrency.Invoker;
-import pet.project.service.concurrency.Task;
+import com.ratryday.pet.service.concurrency.Invoker;
+import com.ratryday.pet.service.concurrency.Task;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@Log4j2
+@Service
 public class ExecutorTest {
-
-  private final LoggerExtender log = new LoggerExtender(this.getClass().getName());
 
   private final CyclicBarrier cyclicBarrier;
   private final Semaphore semaphore;

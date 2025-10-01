@@ -1,10 +1,11 @@
-package pet.project.service.concurrency;
+package com.ratryday.pet.service.concurrency;
 
-import pet.project.logger.LoggerExtender;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
+@Slf4j
 public class Task implements Runnable {
 
   private CyclicBarrier barrier;
@@ -12,9 +13,6 @@ public class Task implements Runnable {
   public Task(CyclicBarrier barrier) {
     this.barrier = barrier;
   }
-
-  private final LoggerExtender log = new LoggerExtender(this.getClass().getName());
-
   @Override
   public void run() {
     try {
@@ -22,7 +20,7 @@ public class Task implements Runnable {
       barrier.await();
       log.info(Thread.currentThread().getName() + " is released");
     } catch (InterruptedException | BrokenBarrierException e) {
-      log.error(e);
+      log.error(e.getLocalizedMessage());
     }
   }
 }
