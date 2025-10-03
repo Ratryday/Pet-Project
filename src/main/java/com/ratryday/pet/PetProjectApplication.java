@@ -1,5 +1,8 @@
 package com.ratryday.pet;
 
+import com.ratryday.pet.dto.User;
+import com.ratryday.pet.kafka.sender.KafkaSender;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationContext;
@@ -14,6 +17,13 @@ import java.time.LocalTime;
 @SpringBootApplication
 public class PetProjectApplication {
 
+  private final KafkaSender kafkaSender;
+
+  @Autowired
+  public PetProjectApplication(KafkaSender kafkaSender) {
+    this.kafkaSender = kafkaSender;
+  }
+
   public static void main(String[] args) {
     SpringApplication.run(PetProjectApplication.class, args);
   }
@@ -23,5 +33,7 @@ public class PetProjectApplication {
     log.info(
         "\n\n******************************** Application ready at: {} ********************************\n\n",
         LocalTime.now());
+    User user = new User("Some message");
+    kafkaSender.sendUser(user, "topic-1");
   }
 }

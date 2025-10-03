@@ -1,3 +1,5 @@
 spring:
   application:
     name: Pet Project
+  kafka:
+    bootstrap-servers: localhost:9092
